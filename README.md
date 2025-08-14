@@ -63,7 +63,7 @@ uvicorn app:app --host 0.0.0.0 --port 8080
 
 ### Notes
 
-- This is **unoficcial** and not affiliated with the authors of Team Topologies
+- This is **unofficial** and not affiliated with the authors of Team Topologies
 - The service is designed for personal/home use (e.g. Synology NAS, Minflux, FreshRSS)
 
 
