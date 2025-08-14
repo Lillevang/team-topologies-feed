@@ -8,8 +8,19 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    strategy:
+      matrix:
+        variant: [alpine, slim]
+        include:
+          - variant: alpine
+            dockerfile: Dockerfile.alpine
+            tags: |
+              lillevang/teamtopologies-feed:alpine
+              lillevang/teamtopologies-feed:latest
+          - variant: slim
+            dockerfile: Dockerfile.slim
+            tags: |
+              lillevang/teamtopologies-feed:slim
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,26 +31,22 @@ jobs:
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Hub
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: lillevang/teamtopologies-feed
-          tags: |
-            type=sha,format=short
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-
-      - name: Build and push
+      - name: Build and push (${{ matrix.variant }})
         uses: docker/build-push-action@v6
         with:
+          file: ${{ matrix.dockerfile }}
+          context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ matrix.tags }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.url=https://hub.docker.com/r/lillevang/teamtopologies-feed
+            org.opencontainers.image.title=teamtopologies-feed
+            org.opencontainers.image.description=Unofficial RSS feed for Team Topologies

@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lillevang/teamtopologies-feed.svg)](https://hub.docker.com/r/lillevang/teamtopologies-feed)
 
+
 This is an **unofficial** RSS feed generator for the [Team Topologies blog](https://teamtopologies.com/blog).  
 The blog does not currently offer an RSS/Atom feed, so this service scrapes the latest posts and exposes them in a standard RSS 2.0 format.
 
@@ -14,6 +15,17 @@ The blog does not currently offer an RSS/Atom feed, so this service scrapes the 
 - ✅ Configurable cache TTL and feed size
 
 ## 🚀 Quick start
+
+### Images
+- `lillevang/teamtopologies-feed:latest` → Alpine (recommended)
+- `lillevang/teamtopologies-feed:alpine` → Alpine (explicit)
+- `lillevang/teamtopologies-feed:slim` → Debian slim
+
+```bash
+docker pull lillevang/teamtopologies-feed:latest
+docker pull lillevang/teamtopologies-feed:slim
+```
+
 
 ### Using Docker
 ```bash
@@ -28,13 +40,13 @@ docker run -d \
 
 Access your feed at:
 
-```
+```bash
 http://localhost:8080/feed.xml
 ```
 
 ### Running locally (Python 3.11+)
 
-```
+```bash
 git clone https://github.com/Lillevang/teamtopologies-feed.git
 cd teamtopologies-feed
 python3 -m venv .venv
